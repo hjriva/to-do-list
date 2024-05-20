@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <input type="checkbox" id="whatever0" class="abc">This task
+    <input type="checkbox" id="whatever1" class="abc">This task
+    <input type="checkbox" id="whatever2" class="abc">This task
+    <input type="checkbox" id="whatever3" class="abc">This task
+    
+    <script>
+        let classabc = window.document.querySelectorAll('.checkitem')
+    
+       for (let f = 0; checklist.length >= f; f++) {
+        
+        //localStorage.setItem(`saved${f}`, JSON.stringify(false))
+        window.document.getElementById(`item${i}`).addEventListener('click', function () {
+            if (window.document.getElementById(`item${i}`).checked) {
+            localStorage.removeItem(`saved${f}`)
+            localStorage.setItem(`saved${f}`, JSON.stringify(true))
+            alert(`saved${f}`)} else if (!window.document.getElementById(`item${i}`).checked) {
+                alert('ayyy')
+                localStorage.removeItem(`saved${f}`)
+                localStorage.setItem(`saved${f}`, JSON.stringify(false))
+            }
+        
+            
+        })
+        
+        var result = JSON.parse(localStorage.getItem(`saved${f}`))
+        if (result !== null) {
+            window.document.getElementById(`item${i}`).checked = result
+        }
+       }
+
+    
+        /*for (let f = 0; classabc.length >= f; f++) {
+            var result = JSON.parse(localStorage.getItem(`saved${f}`))
+            var ei = window.document.getElementById(`whatever${f}`)
+            ei.checked = result
+            alert('i')
+       //window.document.getElementById(`whatever${f}`).checked = JSON.parse(localStorage.getItem(`saved${f}`)) 
+             }
+    
+            
+        //for (let f = 0; classabc.length >= f; f++) {}
+       
+    
+   
+    
+    
+    
+ 
+/*
+    var checked = JSON.parse(localStorage.getItem("whatever-0"));
+    document.getElementById("whatever-0").checked = checked; 
+
+    var checked = JSON.parse(localStorage.getItem("whatever-1"));
+    document.getElementById("whatever-1").checked = checked; 
+    
+    var checked = JSON.parse(localStorage.getItem("whatever-2"));
+    document.getElementById("whatever-2").checked = checked; 
+    
+    var checked = JSON.parse(localStorage.getItem("whatever-3"));
+    document.getElementById("whatever-3").checked = checked; 
+
+*/
+    </script>
+
+</body>
+
+</html>
