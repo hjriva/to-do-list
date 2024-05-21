@@ -13,17 +13,6 @@ function MainFunc(itemvalue, booleanValue) {
     checkitem.setAttribute('id', `item${i}`);
     checkitem.checked = booleanValue
     checklist.push(checkitem)
-    checkitem.addEventListener('click', function () {
-        if (this.checked) {
-            localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
-            localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(true))
-            alert(`${checklist.indexOf(checkitem)} checked`)} else if (!this.checked) {
-                alert(`${checklist.indexOf(checkitem)} unchecked`)
-                localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
-                localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(false))
-            }
-        
-    })
     let lblcont = itemvalue
     list.push(lblcont);
     let nwlbl = document.createElement('label'); 
@@ -34,6 +23,26 @@ function MainFunc(itemvalue, booleanValue) {
     let undo = document.createElement('div');
     undo.textContent = '          x';
     undo.className = 'delete';
+    
+    checkitem.addEventListener('click', function () {
+        if (this.checked) {
+            localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
+            localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(true))
+            alert(`${checklist.indexOf(checkitem)} checked`)
+            nwlbl.classList.add('done')
+            undo.style.color = 'grey'
+            } else if (!this.checked) {
+                alert(`${checklist.indexOf(checkitem)} unchecked`)
+                localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
+                localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(false))
+                nwlbl.classList.remove('done')
+                nwlbl.classList.add('undone')
+                undo.style.color = 'black'
+            }
+        
+    })
+    
+   
     //undo.addEventListener('click', DelIndiv())
     undo.addEventListener('click', function() {
         list.splice(`${checklist.indexOf(checkitem)}`, 1)
@@ -42,8 +51,6 @@ function MainFunc(itemvalue, booleanValue) {
         checkitem.remove()
         nwlbl.remove()
         undo.remove()
-        //let tst = checklist.indexOf(checkitem) - 1
-                            //revisar essa declaração
     
        let cond = list.length
         for (let vi=checklist.indexOf(checkitem); vi <= cond ; vi++) {
@@ -61,6 +68,14 @@ function MainFunc(itemvalue, booleanValue) {
     i++ 
     if (list.length > 1) {
         final.style.display = 'block';
+    }
+
+    if (checkitem.checked) {
+        nwlbl.classList.add('done')
+        undo.style.color = 'grey'
+    } else if (!checkitem.checked) {
+        nwlbl.classList.add('undone')
+        undo.style.color = 'black'
     }
     
     document.querySelector('input#descr').value = ''

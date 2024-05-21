@@ -6,3 +6,14 @@
 display: inline;
 cursor: pointer;
 }
+
+.undone {
+    text-decoration: none;
+    color: black;
+}
+
+
+.done {
+    text-decoration: line-through;
+    color: grey;
+}
