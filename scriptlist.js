@@ -26,7 +26,7 @@ function MainFunc(itemvalue, booleanValue) {
     })
     let lblcont = itemvalue
     list.push(lblcont);
-    let nwlbl = document.createElement('label');
+    let nwlbl = document.createElement('label'); 
     nwlbl.innerText = lblcont;
     nwlbl.setAttribute('for', `item${i}`);
     nwlbl.setAttribute('id', `lbl${i}`);
@@ -45,8 +45,8 @@ function MainFunc(itemvalue, booleanValue) {
         //let tst = checklist.indexOf(checkitem) - 1
                             //revisar essa declaração
     
-       let cond = 3
-        for (let vi=0; vi <= cond ; vi++) {
+       let cond = list.length
+        for (let vi=checklist.indexOf(checkitem); vi <= cond ; vi++) {
             if (checklist[vi].checked) {
                 alert('teste')
                 localStorage.removeItem(`saved${vi}`)
