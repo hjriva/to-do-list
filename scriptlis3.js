@@ -1,4 +1,5 @@
-
+//precisa fazer com que, cda vez que algum item é removido ou adicionado, a barra de progresso é recalculada, pois atualmente ela permanece 
+//done
 
 let list = []
 let checklist = []
@@ -7,6 +8,7 @@ let subdiv = window.document.getElementById('submit')
 let final = window.document.querySelector('input#finaliza')
 let divParent = window.document.getElementById('mostraLista') 
 const bar = window.document.getElementById('pg')
+//bar.style.display = 'none'
 let done = []
 
 function PgTest(a, b) {
@@ -24,23 +26,12 @@ function PgTest(a, b) {
         localStorage.removeItem(`BarPGwid`)
         localStorage.setItem(`BarPGwid`, pcwdcalc - pgCount + '%')
     }
-    //alert(localStorage.getItem(`BarPGwid`))
-}
-                ///PgCheck(list.length, done.length)
-function PgCheck(a,b) {
-    //let wdcalc = window.document.getElementById('pgbar').offsetWidth
-    //let parentcalc = window.document.getElementById('pg').offsetWidth
-    //let pcwdcalc = 100 * (wdcalc / parentcalc)
-    let allTasks = a.length
-    let pgCount = 100 * (b / allTasks )
-    window.document.getElementById('pgbar').style.width = pgCount + '%'
-    localStorage.removeItem(`BarPGwid`)
-    localStorage.setItem(`BarPGwid`, pgCount + '%')
+    alert(localStorage.getItem(`BarPGwid`))
 }
 
 
 
-function MainFunc(itemvalue, booleanValue, addinFunc) {
+function MainFunc(itemvalue, booleanValue) {
     let checkitem = document.createElement('input');
     checkitem.type = 'checkbox';
     checkitem.className = 'itemlist';
@@ -81,8 +72,6 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
         list.splice(`${checklist.indexOf(checkitem)}`, 1)
         alert(`removing ${checklist.indexOf(checkitem)}`)
         alert(list.length)
-        alert(done.length)
-        alert(100 * (done.length / list.length))
         //localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
         checkitem.remove()
         nwlbl.remove()
@@ -95,7 +84,6 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
                 localStorage.setItem(`saved${vi-1}`, JSON.stringify(true))
             }
         }
-        PgCheck(list, done.length)
     })
     divParent.appendChild(container);
     container.appendChild(checkitem);
@@ -112,14 +100,10 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
         nwlbl.classList.add('undone')
         undo.style.color = 'black'
     }
-
-    //PgCheck(list, done.length)
-    addinFunc
     document.querySelector('input#descr').value = ''
-    //alert(list.length)
 }
 
-window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgTest(list, done.length)})
+window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false)})
 
 let newlist = document.createElement('input')
 newlist.type = 'button'
@@ -157,7 +141,6 @@ newlist.addEventListener('click', function() {
     subdiv.style.display = 'inherit'
     bar.style.display = 'none'
     UndoDisplay('initial') 
-
 })
 
 excluir.addEventListener('click', function () {
