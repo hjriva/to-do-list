@@ -17,3 +17,15 @@ cursor: pointer;
     text-decoration: line-through;
     color: grey;
 }
+
+#pg {
+    width: 100%;
+    background-color: grey;
+    
+}
+
+#pgbar {
+width: 0%;
+height: 30px;
+background-color: green;
+}
