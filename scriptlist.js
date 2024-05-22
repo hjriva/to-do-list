@@ -28,8 +28,17 @@ function PgTest(a, b) {
     }
     alert(localStorage.getItem(`BarPGwid`))
 }
-
-
+                ///PgCheck(list.length, done.length)
+function PgCheck(a,b) {
+    //let wdcalc = window.document.getElementById('pgbar').offsetWidth
+    //let parentcalc = window.document.getElementById('pg').offsetWidth
+    //let pcwdcalc = 100 * (wdcalc / parentcalc)
+    let allTasks = a.length
+    let pgCount = 100 * (b / allTasks )
+    window.document.getElementById('pgbar').style.width = pgCount + '%'
+    localStorage.removeItem(`BarPGwid`)
+    localStorage.setItem(`BarPGwid`, pgCount + '%')
+}
 
 function MainFunc(itemvalue, booleanValue) {
     let checkitem = document.createElement('input');
@@ -72,6 +81,8 @@ function MainFunc(itemvalue, booleanValue) {
         list.splice(`${checklist.indexOf(checkitem)}`, 1)
         alert(`removing ${checklist.indexOf(checkitem)}`)
         alert(list.length)
+        alert(done.length)
+        alert(100 * (done.length / list.length))
         //localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
         checkitem.remove()
         nwlbl.remove()
@@ -84,6 +95,7 @@ function MainFunc(itemvalue, booleanValue) {
                 localStorage.setItem(`saved${vi-1}`, JSON.stringify(true))
             }
         }
+        PgCheck(list, done.length)
     })
     divParent.appendChild(container);
     container.appendChild(checkitem);
@@ -100,6 +112,8 @@ function MainFunc(itemvalue, booleanValue) {
         nwlbl.classList.add('undone')
         undo.style.color = 'black'
     }
+
+    PgCheck(list, done.length)
     document.querySelector('input#descr').value = ''
 }
 
