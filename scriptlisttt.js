@@ -1,3 +1,6 @@
+//precisa fazer com que, cda vez que algum item é removido ou adicionado, a barra de progresso é recalculada, pois atualmente ela permanece 
+//done
+
 let list = []
 let checklist = []
 let i = 0
@@ -5,6 +8,7 @@ let subdiv = window.document.getElementById('submit')
 let final = window.document.querySelector('input#finaliza')
 let divParent = window.document.getElementById('mostraLista') 
 const bar = window.document.getElementById('pg')
+//bar.style.display = 'none'
 let done = []
 
 function PgTest(a, b) {
@@ -22,18 +26,21 @@ function PgTest(a, b) {
         localStorage.removeItem(`BarPGwid`)
         localStorage.setItem(`BarPGwid`, pcwdcalc - pgCount + '%')
     }
+    alert(localStorage.getItem(`BarPGwid`))
 }
-
+                ///PgCheck(list.length, done.length)
 function PgCheck(a,b) {
+    //let wdcalc = window.document.getElementById('pgbar').offsetWidth
+    //let parentcalc = window.document.getElementById('pg').offsetWidth
+    //let pcwdcalc = 100 * (wdcalc / parentcalc)
     let allTasks = a.length
     let pgCount = 100 * (b / allTasks )
     window.document.getElementById('pgbar').style.width = pgCount + '%'
     localStorage.removeItem(`BarPGwid`)
     localStorage.setItem(`BarPGwid`, pgCount + '%')
-
 }
 
-function MainFunc(itemvalue, booleanValue, addinFunc) {
+function MainFunc(itemvalue, booleanValue) {
     let checkitem = document.createElement('input');
     checkitem.type = 'checkbox';
     checkitem.className = 'itemlist';
@@ -58,25 +65,12 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
             nwlbl.classList.add('done')
             undo.style.color = 'grey'
             done.push(checkitem)
-            //alert('done' + done.length)
-            //localStorage.removeItem(`DoneLength`)
-            //localStorage.setItem(`DoneLength`, done.length)
             PgTest(list, checkitem)
-            alert('nova lista done' + done.length)
-            alert('lista toda ' + list.length)
-            //alert('feitos '  + done.length)
-            alert('porcentagem ' + 100 * (done.length / list.length))
-        
             }
         else if (!this.checked) {
             alert(`${checklist.indexOf(checkitem)} unchecked`)
             localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
             localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(false))
-            done.splice(`${done.indexOf(checkitem)}`, 1) 
-            //alert('done' + done.length)
-            //localStorage.removeItem(`DoneLength`)
-            //localStorage.setItem(`DoneLength`, done.length)
-            alert('nova lista done' + done.length)
             nwlbl.classList.remove('done')
             nwlbl.classList.add('undone')
             undo.style.color = 'black'
@@ -85,25 +79,23 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
     })
     undo.addEventListener('click', function() {
         list.splice(`${checklist.indexOf(checkitem)}`, 1)
-        if (checkitem.checked) {
-            done.splice(`${done.indexOf(checkitem)}`, 1)  
-        }
         alert(`removing ${checklist.indexOf(checkitem)}`)
-        alert('lista toda ' + list.length)
-        alert('feitos '  + done.length)
-        alert('porcentagem ' + 100 * (done.length / list.length))
+        alert(list.length)
+        alert(done.length)
+        alert(100 * (done.length / list.length))
+        //localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
         checkitem.remove()
         nwlbl.remove()
         undo.remove()
-        let cond = list.length
+       let cond = list.length
         for (let vi=checklist.indexOf(checkitem); vi <= cond ; vi++) {
             if (checklist[vi].checked) {
+                alert('teste')
                 localStorage.removeItem(`saved${vi}`)
                 localStorage.setItem(`saved${vi-1}`, JSON.stringify(true))
-            } 
-        } 
-        checklist.splice(`${checklist.indexOf(checkitem)}`, 1)
-        PgCheck(list, done.length)  
+            }
+        }
+        PgCheck(list, done.length)
     })
     divParent.appendChild(container);
     container.appendChild(checkitem);
@@ -120,14 +112,12 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
         nwlbl.classList.add('undone')
         undo.style.color = 'black'
     }
-    addinFunc
+
+    PgCheck(list, done.length)
     document.querySelector('input#descr').value = ''
-    alert('lista toda ' + list.length)
-    alert('feitos'  + done.length)
-    alert('porcentagem' + 100 * (done.length / list.length))
 }
 
-window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgCheck(list, done.length)})
+window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false)})
 
 let newlist = document.createElement('input')
 newlist.type = 'button'
@@ -163,8 +153,8 @@ newlist.addEventListener('click', function() {
     this.style.display = 'none'
     final.style.display = 'inherit'
     subdiv.style.display = 'inherit'
+    bar.style.display = 'none'
     UndoDisplay('initial') 
-
 })
 
 excluir.addEventListener('click', function () {
@@ -177,7 +167,6 @@ excluir.addEventListener('click', function () {
     list.splice(list[0], list.length)
     checklist.splice(checklist[0], checklist.length)  
     window.document.getElementById('pgbar').style.width = '0'
-    final.style.display = 'none'
 })
 
 
@@ -204,9 +193,6 @@ if (listasalva !== null) {
     while (listasalva.length > co) {
         var result = JSON.parse(localStorage.getItem(`saved${co}`))
         MainFunc(listasalva[i], result)
-        if (result == true) {
-            done.push(localStorage.getItem(`saved${co}`))
-        }
         co++
     }
     OngoingList()
