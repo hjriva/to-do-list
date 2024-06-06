@@ -4,36 +4,25 @@ let i = 0
 let subdiv = window.document.getElementById('submit')
 let final = window.document.querySelector('input#finaliza')
 let divParent = window.document.getElementById('mostraLista') 
-const bar = window.document.getElementById('pg')
+const ExtBar = window.document.getElementById('pg')
+const pgTxt = window.document.getElementById('pgtxt')
 let done = []
+const PgBar = window.document.getElementById('pgbar')
+const UnderList = window.document.getElementById('botoes')
 
-function PgTest(a, b) {
-    let wdcalc = window.document.getElementById('pgbar').offsetWidth
-    let parentcalc = window.document.getElementById('pg').offsetWidth
-    let pcwdcalc = 100 * (wdcalc / parentcalc)
-    let allTasks = a.length
-    let pgCount = 100 * (1 / allTasks )
-    if (b.checked) {
-    window.document.getElementById('pgbar').style.width = pcwdcalc + pgCount + '%'
-    localStorage.removeItem(`BarPGwid`)
-    localStorage.setItem(`BarPGwid`, pcwdcalc + pgCount + '%')
-    } else if (!b.checked) {
-        window.document.getElementById('pgbar').style.width = pcwdcalc - pgCount + '%'
-        localStorage.removeItem(`BarPGwid`)
-        localStorage.setItem(`BarPGwid`, pcwdcalc - pgCount + '%')
+function PgFunc(a,b) {
+    let pgCalc = 100 * (b / a)
+    PgBar.style.width = pgCalc + '%'
+    if (Number.isInteger(pgCalc)) {
+        pgTxt.innerHTML = pgCalc.toLocaleString('pt-BR') + '%' + '(' + done.length + ' de ' + list.length + ')'
+    } else if (!Number.isInteger(pgCalc)) {
+        pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + '(' + done.length + ' de ' + list.length + ')'
     }
-}
-
-function PgCheck(a,b) {
-    let allTasks = a.length
-    let pgCount = 100 * (b / allTasks )
-    window.document.getElementById('pgbar').style.width = pgCount + '%'
     localStorage.removeItem(`BarPGwid`)
-    localStorage.setItem(`BarPGwid`, pgCount + '%')
-
+    localStorage.setItem(`BarPGwid`, pgCalc + '%')
 }
 
-function MainFunc(itemvalue, booleanValue, addinFunc) {
+function MainFunc(itemvalue, booleanValue, addFunc) {
     let checkitem = document.createElement('input');
     checkitem.type = 'checkbox';
     checkitem.className = 'itemlist';
@@ -54,56 +43,41 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
         if (this.checked) {
             localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
             localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(true))
-            alert(`${checklist.indexOf(checkitem)} checked`)
             nwlbl.classList.add('done')
             undo.style.color = 'grey'
             done.push(checkitem)
-            //alert('done' + done.length)
-            //localStorage.removeItem(`DoneLength`)
-            //localStorage.setItem(`DoneLength`, done.length)
-            PgTest(list, checkitem)
-            alert('nova lista done' + done.length)
-            alert('lista toda ' + list.length)
-            //alert('feitos '  + done.length)
-            alert('porcentagem ' + 100 * (done.length / list.length))
-        
-            }
+            PgFunc(list.length, done.length) 
+            undo.style.display = 'none'
+        }
         else if (!this.checked) {
-            alert(`${checklist.indexOf(checkitem)} unchecked`)
-            localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
+            
             localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(false))
-            done.splice(`${done.indexOf(checkitem)}`, 1) 
-            //alert('done' + done.length)
-            //localStorage.removeItem(`DoneLength`)
-            //localStorage.setItem(`DoneLength`, done.length)
-            alert('nova lista done' + done.length)
+            done.splice(`${done.indexOf(checkitem)}`, 1)
             nwlbl.classList.remove('done')
             nwlbl.classList.add('undone')
             undo.style.color = 'black'
-            PgTest(list, checkitem)
-            }      
+            PgFunc(list.length, done.length) 
+            undo.style.display = 'initial'
+        }      
     })
     undo.addEventListener('click', function() {
-        list.splice(`${checklist.indexOf(checkitem)}`, 1)
         if (checkitem.checked) {
-            done.splice(`${done.indexOf(checkitem)}`, 1)  
+            localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
+            done.splice(`${done.indexOf(checkitem)}`, 1)
         }
-        alert(`removing ${checklist.indexOf(checkitem)}`)
-        alert('lista toda ' + list.length)
-        alert('feitos '  + done.length)
-        alert('porcentagem ' + 100 * (done.length / list.length))
+        list.splice(`${checklist.indexOf(checkitem)}`, 1)
         checkitem.remove()
         nwlbl.remove()
         undo.remove()
         let cond = list.length
-        for (let vi=checklist.indexOf(checkitem); vi <= cond ; vi++) {
+        for (let vi=checklist.indexOf(checkitem)+1; vi <= cond ; vi++) {
             if (checklist[vi].checked) {
                 localStorage.removeItem(`saved${vi}`)
                 localStorage.setItem(`saved${vi-1}`, JSON.stringify(true))
             } 
         } 
         checklist.splice(`${checklist.indexOf(checkitem)}`, 1)
-        PgCheck(list, done.length)  
+        PgFunc(list.length, done.length)  
     })
     divParent.appendChild(container);
     container.appendChild(checkitem);
@@ -112,109 +86,107 @@ function MainFunc(itemvalue, booleanValue, addinFunc) {
     i++ 
     if (list.length > 1) {
         final.style.display = 'block';
+        let pgCalc = 100 * (done.length / list.length)
+        if (Number.isInteger(pgCalc)) {
+            pgTxt.innerHTML = pgCalc.toLocaleString('pt-BR') + '%' + '(' + done.length + ' de ' + list.length + ')'
+        } else if (!Number.isInteger(pgCalc)) {
+            pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + '(' + done.length + ' de ' + list.length + ')'
+        }
     }
     if (checkitem.checked) {
         nwlbl.classList.add('done')
         undo.style.color = 'grey'
-    } else if (!checkitem.checked) {
+    } 
+    else if (!checkitem.checked) {
         nwlbl.classList.add('undone')
         undo.style.color = 'black'
     }
-    addinFunc
+    addFunc
     document.querySelector('input#descr').value = ''
-    alert('lista toda ' + list.length)
-    alert('feitos'  + done.length)
-    alert('porcentagem' + 100 * (done.length / list.length))
 }
 
-window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgCheck(list, done.length)})
+window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgFunc(list.length, done.length)})
 
-let newlist = document.createElement('input')
-newlist.type = 'button'
-newlist.value = 'editar lista'
+let editar = document.createElement('input')
+editar.type = 'button'
+editar.value = 'editar lista'
 let excluir = document.createElement('input')
 excluir.type = 'button'
 excluir.value = 'excluir lista'
 excluir.setAttribute('id', 'removelist')
 
-
-function UndoDisplay(disp) {
+function UndoDisplay(disp1, disp2) {
     let d = window.document.getElementsByClassName('delete')
+    let il = window.document.getElementsByClassName('itemlist')
     c = 0
     while (c <= d.length) {
-        d[c].style.display = disp
+        if (il[c].checked) {
+            d[c].style.display = disp1
+        } else if (!il[c].checked) {
+            d[c].style.display = disp2
+        }
         c++
-    }}
+    }
+}
 
 function OngoingList() {
-   //localStorage.setItem('savedList', divParent.innerHTML) 
     localStorage.setItem('savedlistjson', JSON.stringify(list))
     final.style.display = 'none'
     subdiv.style.display = 'none'
-    divParent.appendChild(newlist)
-    divParent.appendChild(excluir)
-    newlist.style.display = 'block'
-    bar.style.display = 'block'
-    UndoDisplay('none')
+    UnderList.appendChild(editar)
+    UnderList.appendChild(excluir)
+    editar.style.display = 'block'
+    ExtBar.style.display = 'block'
+    excluir.style.display = 'block'
+    UndoDisplay('none', 'none')
 }
+
 final.addEventListener('click', function () {OngoingList()})
      
-newlist.addEventListener('click', function() {
+editar.addEventListener('click', function() {
     this.style.display = 'none'
     final.style.display = 'inherit'
     subdiv.style.display = 'inherit'
-    UndoDisplay('initial') 
+    UndoDisplay('none', 'initial') 
 
 })
 
 excluir.addEventListener('click', function () {
     localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', null)
-    //sessionStorage.removeItem('savedlistjson')
     localStorage.clear()
     divParent.innerHTML = ''
     subdiv.style.display = 'initial'
-    list.splice(list[0], list.length)
-    checklist.splice(checklist[0], checklist.length)  
+    excluir.style.display = 'none'
+    editar.style.display = 'none'
+    list.splice(0, list.length)
+    done.splice(0, done.length)
+    checklist.splice(0, checklist.length) 
     window.document.getElementById('pgbar').style.width = '0'
     final.style.display = 'none'
+    localStorage.removeItem(`BarPGwid`)
+    localStorage.setItem(`BarPGwid`, '0')
+    pgTxt.innerHTML = ''
 })
-
-
-
-//versão do localstorage.getitgem usando innerhtml
-/*
-
-const listasalva = localStorage.getItem('savedList')
-if (listasalva != null) {
-    divParent.innerHTML = listasalva
-    OngoingList()
-}
-
-
-versão da mesma função acima usando json
-para ser usada, a linha do setitem da função OngoingList precisa ser mudada para: localStorage.setItem('savedList', JSON.stringify(list))
- */
-
 
 const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
 if (listasalva !== null) {
-    window.document.getElementById('pgbar').style.width =  window.document.getElementById('pgbar').style.width = localStorage.getItem('BarPGwid')
+    window.document.getElementById('pgbar').style.width = localStorage.getItem('BarPGwid')
     let co = 0
     while (listasalva.length > co) {
         var result = JSON.parse(localStorage.getItem(`saved${co}`))
-        MainFunc(listasalva[i], result)
         if (result == true) {
             done.push(localStorage.getItem(`saved${co}`))
         }
+        MainFunc(listasalva[i], result)
         co++
     }
     OngoingList()
+
+    
+    
 }
    
-  
-   
-        
        
       
 
