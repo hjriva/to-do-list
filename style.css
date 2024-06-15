@@ -1,3 +1,14 @@
+.drag-item {
+    border: black solid 1px;
+    margin: 1px;
+    cursor: move;
+}
+
+.drag-list {
+    list-style: none;
+    padding: 0;
+  }
+
 #finaliza {
     display: none;
 }
@@ -21,10 +32,24 @@ cursor: pointer;
 #pg {
     width: 100%;
     background-color: grey;   
+    display: none;
 }
 
 #pgbar {
     width: 0%;
     height: 30px;
     background-color: green;
+}
+
+.dragging {
+    background-color: grey;
+    opacity: 1;
+}
+
+#mostraLista {
+    list-style-type: none;
+}
+
+#pgtxt {
+    display: none;
 }

@@ -22,6 +22,108 @@ function PgFunc(a,b) {
     localStorage.setItem(`BarPGwid`, pgCalc + '%')
 }
 
+//ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
+const dragList = document.getElementById('mostraLista');
+let draggedItem = null;
+dragList.addEventListener('dragstart', handleDragStart);
+dragList.addEventListener('dragover', handleDragOver);
+dragList.addEventListener('drop', handleDrop);
+
+function handleDragStart(event) {
+    draggedItem = event.target;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/html', draggedItem.innerHTML);
+    event.target.style.opacity = '0.5';
+}
+  
+function handleDragOver(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    const targetItem = event.target;
+    if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
+        let clss = window.document.getElementsByClassName('drag-item')
+        for (let c = 0; c <= clss.length; c++) {
+            clss[c].style.margin = '6px'
+        }
+    }
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    const targetItem = event.target;
+    if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
+        if (event.clientY > targetItem.getBoundingClientRect().top + (targetItem.offsetHeight / 2)) {
+            targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
+        } 
+        else {
+            targetItem.parentNode.insertBefore(draggedItem, targetItem);
+        }
+    } 
+    else if (targetItem.getAttribute('id') == 'mostraLista') {
+        let clss = window.document.getElementsByClassName('drag-item')
+        for (c=0, calc=0; calc <= event.clientY; c++) {
+            calc = clss[c].getBoundingClientRect().top
+            if (calc >= event.clientY) {
+                dragList.insertBefore(draggedItem, dragList.children[c])
+            }
+        }
+    }   
+    if (window.document.getElementById(`item${draggedItem.getAttribute('id')}`).checked) {
+        dragList.addEventListener('dragend', function updateArray() {
+            const listItems = document.querySelectorAll('.done');
+            done.splice = (0, done.length)
+            listItems.forEach(item => {
+                done.push(item);
+            });
+        });
+    }
+    
+    targetItem.style.borderTop = '';
+    targetItem.style.borderBottom = '';
+    draggedItem.style.opacity = '';
+    draggedItem = null;
+    
+    let clss = window.document.getElementsByClassName('drag-item')
+    for (let c = 0; c <= clss.length; c++) {
+        clss[c].style.margin = 'initial'
+    }
+}
+
+//adaptado do chat gpt
+dragList.addEventListener('dragend', function updateArrayList() {
+    const listItems = document.querySelectorAll('.itemlist');
+    checklist = [];
+    for (let c = 0; c < listItems.length; c++) {
+        checklist.push(listItems[c]);
+        localStorage.removeItem(`saved${c}`)
+        if (listItems[c].checked) {
+            localStorage.setItem(`saved${c}`, JSON.stringify(true))
+        }
+    }
+})
+
+dragList.addEventListener('dragend', function updateArrayCheckList() {
+    let listItems = document.querySelectorAll('.allitems');
+    list = [];
+    for (let c = 0; c < listItems.length; c++) {
+        list.push(listItems[c].innerText);
+    }
+    const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
+    if (listasalva !== null)  {
+        localStorage.setItem('savedlistjson', null)
+        localStorage.removeItem('savedlistjson')
+        localStorage.setItem('savedlistjson', JSON.stringify(list))
+    } 
+});
+
+dragList.addEventListener('dragend', () => {
+    updateArray('.itemlist', checklist)
+})
+
+dragList.addEventListener('dragend', () => {
+    updateArray('.allitems', list)
+});
+
 function MainFunc(itemvalue, booleanValue, addFunc) {
     let checkitem = document.createElement('input');
     checkitem.type = 'checkbox';
@@ -33,9 +135,13 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     list.push(lblcont);
     let nwlbl = document.createElement('label'); 
     nwlbl.innerText = lblcont;
+    nwlbl.className = 'allitems'
     nwlbl.setAttribute('for', `item${i}`);
     nwlbl.setAttribute('id', `lbl${i}`);
-    let container = document.createElement('div');
+    let container = document.createElement('li');
+    container.className = 'drag-item'
+    container.setAttribute('id', `${i}`)
+    container.setAttribute('draggable', 'true')
     let undo = document.createElement('div');
     undo.textContent = '          x';
     undo.className = 'delete';
@@ -48,6 +154,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             done.push(checkitem)
             PgFunc(list.length, done.length) 
             undo.style.display = 'none'
+            //alert('check ' + checklist.indexOf(checkitem))
         }
         else if (!this.checked) {
             
@@ -86,6 +193,8 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     i++ 
     if (list.length > 1) {
         final.style.display = 'block';
+        ExtBar.style.display = 'block'
+        pgTxt.style.display = 'block'
         let pgCalc = 100 * (done.length / list.length)
         if (Number.isInteger(pgCalc)) {
             pgTxt.innerHTML = pgCalc.toLocaleString('pt-BR') + '%' + '(' + done.length + ' de ' + list.length + ')'
@@ -148,7 +257,6 @@ editar.addEventListener('click', function() {
     final.style.display = 'inherit'
     subdiv.style.display = 'inherit'
     UndoDisplay('none', 'initial') 
-
 })
 
 excluir.addEventListener('click', function () {
@@ -164,6 +272,7 @@ excluir.addEventListener('click', function () {
     checklist.splice(0, checklist.length) 
     window.document.getElementById('pgbar').style.width = '0'
     final.style.display = 'none'
+    ExtBar.style.display = 'none'
     localStorage.removeItem(`BarPGwid`)
     localStorage.setItem(`BarPGwid`, '0')
     pgTxt.innerHTML = ''
@@ -171,6 +280,7 @@ excluir.addEventListener('click', function () {
 
 const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
 if (listasalva !== null) {
+    alert(listasalva.length)
     window.document.getElementById('pgbar').style.width = localStorage.getItem('BarPGwid')
     let co = 0
     while (listasalva.length > co) {
@@ -182,14 +292,6 @@ if (listasalva !== null) {
         co++
     }
     OngoingList()
-
-    
-    
 }
-   
-       
-      
-
-        
         
         
