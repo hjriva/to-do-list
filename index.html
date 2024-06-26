@@ -7,22 +7,24 @@
    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="submitListBox">
     <div id="submit">
-    <p>o que você precisa fazer hoje?</p>
-    <input type="text" id="descr"> <input type="button" value="adicionar" id="add">
+        <p>O que você precisa fazer hoje?</p>
+        <input type="text" id="descr" placeholder="adicione uma coisa de cada vez"> <input type="button" value="adicionar" id="add">
+    </div>
+    <div id="listBox">
+        <div id="pg" class="tooltip">
+            <div id="pgbar"></div>
+        </div>
+        <span id="pgtxt"></span>
+        <div id="listContainer">
+            <ul id="mostraLista"></ul>
+        </div>
+        <div id="botoes">
+        <input type="button" value="salvar" id="finaliza">
+        </div>
+    </div>
 </div>
-    <div id="listContainer">
-        <ul id="mostraLista">
-
-        </ul>
-    </div>
-    <div id="botoes">
-    <input type="button" value="salvar" id="finaliza">
-    </div>
-    <div id="pg">
-        <div id="pgbar"></div>
-    </div>
-    <div id="pgtxt"></div>
    <script src="scriptlist.js"></script>
 </body>
 </html>

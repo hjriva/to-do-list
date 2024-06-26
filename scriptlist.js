@@ -201,7 +201,9 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         } else if (!Number.isInteger(pgCalc)) {
             pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + '(' + done.length + ' de ' + list.length + ')'
         }
+        window.document.getElementById('listBox').className = 'listBorderBox'
     }
+    
     if (checkitem.checked) {
         nwlbl.classList.add('done')
         undo.style.color = 'grey'
@@ -264,7 +266,7 @@ excluir.addEventListener('click', function () {
     localStorage.setItem('savedlistjson', null)
     localStorage.clear()
     divParent.innerHTML = ''
-    subdiv.style.display = 'initial'
+    subdiv.style.display = 'block'
     excluir.style.display = 'none'
     editar.style.display = 'none'
     list.splice(0, list.length)
@@ -276,6 +278,7 @@ excluir.addEventListener('click', function () {
     localStorage.removeItem(`BarPGwid`)
     localStorage.setItem(`BarPGwid`, '0')
     pgTxt.innerHTML = ''
+    window.document.getElementById('listBox').classList.remove('listBorderBox')
 })
 
 const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
