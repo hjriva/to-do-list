@@ -1,3 +1,8 @@
+window.document.getElementById('currentcolor').addEventListener('click', function () {
+    let optionalColors = window.document.getElementById('optcolors')
+    optionalColors.style.display == 'none' ? optionalColors.style.display = 'grid' : optionalColors.style.display = 'none'
+})
+
 let list = []
 let checklist = []
 let i = 0
@@ -21,6 +26,13 @@ function PgFunc(a,b) {
     localStorage.removeItem(`BarPGwid`)
     localStorage.setItem(`BarPGwid`, pgCalc + '%')
 }
+//adaptado do chat gpt
+document.querySelector('.tooltip').addEventListener('mouseover', function(event) {
+    const tooltip = this.querySelector('.tooltiptext');
+    tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
+});
+
+
 
 //ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
 const dragList = document.getElementById('mostraLista');
@@ -43,7 +55,7 @@ function handleDragOver(event) {
     if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
         let clss = window.document.getElementsByClassName('drag-item')
         for (let c = 0; c <= clss.length; c++) {
-            clss[c].style.margin = '6px'
+            clss[c].style.margin = '3px'
         }
     }
 }
@@ -85,7 +97,7 @@ function handleDrop(event) {
     
     let clss = window.document.getElementsByClassName('drag-item')
     for (let c = 0; c <= clss.length; c++) {
-        clss[c].style.margin = 'initial'
+        clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
 }
 
@@ -134,6 +146,10 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     let lblcont = itemvalue
     list.push(lblcont);
     let nwlbl = document.createElement('label'); 
+    let checkedLabel = document.createElement('label')
+    checkedLabel.classList.add('checkmarked')
+    let spanCheck = document.createElement('span')
+    spanCheck.classList.add('check')
     nwlbl.innerText = lblcont;
     nwlbl.className = 'allitems'
     nwlbl.setAttribute('for', `item${i}`);
@@ -154,7 +170,6 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             done.push(checkitem)
             PgFunc(list.length, done.length) 
             undo.style.display = 'none'
-            //alert('check ' + checklist.indexOf(checkitem))
         }
         else if (!this.checked) {
             
@@ -164,7 +179,9 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             nwlbl.classList.add('undone')
             undo.style.color = 'black'
             PgFunc(list.length, done.length) 
-            undo.style.display = 'initial'
+            if (subdiv.style.display !== 'none') {
+                undo.style.display = 'inline'
+            }
         }      
     })
     undo.addEventListener('click', function() {
@@ -187,7 +204,9 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         PgFunc(list.length, done.length)  
     })
     divParent.appendChild(container);
-    container.appendChild(checkitem);
+    checkedLabel.appendChild(checkitem);
+    checkedLabel.appendChild(spanCheck )
+    container.appendChild(checkedLabel);
     container.appendChild(nwlbl);
     container.appendChild(undo);
     i++ 
@@ -283,7 +302,6 @@ excluir.addEventListener('click', function () {
 
 const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
 if (listasalva !== null) {
-    alert(listasalva.length)
     window.document.getElementById('pgbar').style.width = localStorage.getItem('BarPGwid')
     let co = 0
     while (listasalva.length > co) {
