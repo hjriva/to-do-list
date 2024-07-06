@@ -32,8 +32,6 @@ document.querySelector('.tooltip').addEventListener('mouseover', function(event)
     tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
 });
 
-
-
 //ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
 const dragList = document.getElementById('mostraLista');
 let draggedItem = null;
@@ -220,6 +218,10 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         } else if (!Number.isInteger(pgCalc)) {
             pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + '(' + done.length + ' de ' + list.length + ')'
         }
+        
+    }
+
+    if (list.length > 0) {
         window.document.getElementById('listBox').className = 'listBorderBox'
     }
     
@@ -236,6 +238,78 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
 }
 
 window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgFunc(list.length, done.length)})
+
+const root = document.querySelector(':root')
+window.document.getElementById('toggletheme').addEventListener('click', function DarkLight() {
+    window.document.getElementById('theme').setAttribute('href', 'style.css')
+    if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
+        root.style.setProperty('--fundo', '#000000');
+        root.style.setProperty('--lightdarkref', '#ffffff')
+        root.style.setProperty('--caixaprincipalref', '#161616')
+        root.style.setProperty('--caixaprincipal', '#161616')
+        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(0, 0, 0)') {
+            root.style.setProperty('--linhas', '#ffffff')  
+        } else {
+            root.style.setProperty('--linhas', localStorage.getItem('linepref'))  
+        }
+       
+        localStorage.removeItem('savedtheme')
+        localStorage.setItem('savedtheme', 'dark') 
+        document.getElementById('icon').innerText = 'lightbulb'
+    } else if (localStorage.getItem('savedtheme') == 'dark') {
+        window.document.getElementById('theme').setAttribute('href', 'style.css')
+        root.style.setProperty('--fundo', '#ffffff')
+        root.style.setProperty('--lightdarkref', '#000000')
+        root.style.setProperty('--caixaprincipalref', '#d0d0d0')
+        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(255, 255, 255)') {
+            root.style.setProperty('--caixaprincipal', '#d0d0d0 ')
+            root.style.setProperty('--linhas', '#000000') 
+        } else {
+            root.style.setProperty('--linhas', localStorage.getItem('linepref')) 
+            root.style.setProperty('--caixaprincipal', localStorage.getItem('boxbgpref'))
+        }
+        if (localStorage.getItem('linepref') === 'rgb(250, 255, 0)') {
+            if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
+                window.document.getElementById('theme').setAttribute('href', 'lightyellow.css')
+            } else {
+                window.document.getElementById('theme').setAttribute('href', 'style.css')
+            }
+        }
+        if (localStorage.getItem('linepref') === 'rgb(250, 255, 0)') {
+            window.document.getElementById('theme').setAttribute('href', 'lightyellow.css')
+        } else {
+            window.document.getElementById('theme').setAttribute('href', 'style.css') 
+        }
+        localStorage.removeItem('savedtheme')
+        localStorage.setItem('savedtheme', 'light')
+        document.getElementById('icon').innerText = 'dark_mode'
+    }
+})
+
+//adaptado do chat gpt
+
+let cores = window.document.getElementsByClassName('optcol')
+Array.from(cores).forEach(function(cor) {
+    cor.addEventListener('click', function () {
+        window.document.getElementById('theme').setAttribute('href', 'style.css')
+        root.style.setProperty('--linhas', window.getComputedStyle(cor).backgroundColor)
+        localStorage.removeItem('linepref')
+        localStorage.setItem('linepref', window.getComputedStyle(cor).backgroundColor) 
+        if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
+            root.style.setProperty('--caixaprincipal', window.getComputedStyle(cor).color)   
+        }
+        localStorage.removeItem('boxbgpref')
+        localStorage.setItem('boxbgpref', window.getComputedStyle(cor).color) 
+    })
+})
+
+window.document.getElementById('c5').addEventListener('click', function () {
+    if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
+        window.document.getElementById('theme').setAttribute('href', 'lightyellow.css')
+    } else {
+        window.document.getElementById('theme').setAttribute('href', 'style.css')
+    }
+})
 
 let editar = document.createElement('input')
 editar.type = 'button'
@@ -300,6 +374,7 @@ excluir.addEventListener('click', function () {
     window.document.getElementById('listBox').classList.remove('listBorderBox')
 })
 
+
 const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
 if (listasalva !== null) {
     window.document.getElementById('pgbar').style.width = localStorage.getItem('BarPGwid')
@@ -314,5 +389,7 @@ if (listasalva !== null) {
     }
     OngoingList()
 }
-        
-        
+
+
+
+

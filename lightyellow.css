@@ -4,7 +4,7 @@
 
 :root {
     --fundo: #ffffff; /*fundo, dragitem, botões e caixa de texto*/
-    --caixaprincipal: #d0d0d0 /* fundo de caixa*/;
+    --caixaprincipal: #f7f8c6/* fundo de caixa*/;
     --linhas: /*contornos, bordas e letras*/ black;
     --fundopg: #e9e9e9;
     --dragging: #808080;
@@ -43,6 +43,9 @@ li {
     padding: 3px;
     background-color: var(--fundo);
     margin: 0px 3.5px 0px 3.5px;
+    color: black;
+    background-color: #fcff99;
+    border: 1px solid #faff13;
 }
 
 .drag-list {
@@ -63,7 +66,7 @@ li {
 
 .undone {
     text-decoration: none;
-    color: var(--linhas);
+    color: black
 }
 
 .done {
@@ -114,7 +117,7 @@ li {
     text-align: center;
     margin: 0px auto 0px auto;
     display: block;
-    color: var(--linhas) ;
+    color: black ;
 }
 
 #descr {
@@ -124,22 +127,22 @@ li {
     border-radius: 3px;
     padding: 0px 5px 0px 5px;
     font-size: 15px;
-    background-color:var(--fundo) ;
+    background-color: #fbfe7f ;
 }
 
 input[type=button] {
-    background-color: var(--fundo);
+    background-color: #fcff99;
     border: var(--linhas) solid 1px;
     height: 25px;
     text-align: center;
     font-size: 15px;
     cursor: pointer;
-    color:  var(--linhas);
+    color:  black;
 }
 
 input[type=button]:hover {
     background-color: var(--linhas);
-    color: var(--fundo)
+    color: black
 }
 
 ::-ms-input-placeholder { /* Edge 12-18 color: #7e7e7e; */
@@ -202,14 +205,14 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: var(--linhas) transparent transparent transparent;
+    border-color: black transparent transparent transparent;
 }
 
 /*adaptado do chat gpt*/
 
 .checkmarked {
     position: relative;
-    border: 1px solid var(--linhas);
+    border: 1px solid black;
     width: 10px;
     height: 10px;
     display: inline-block;
@@ -247,8 +250,8 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     left: 50%;
     width: 3px;
     height: 8px;
-    border-bottom: 1px solid var(--linhas);
-    border-right: 1px solid var(--linhas);
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
     margin: 0;
     vertical-align: center;   
 }
@@ -372,9 +375,4 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     color: var(--linhas);
 }
 
-.itemYellowLight {
-    color: black;
-    background-color: #fcff99;
-    border: 1px solid #faff13;
-}
 
