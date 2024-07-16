@@ -19,9 +19,9 @@ function PgFunc(a,b) {
     let pgCalc = 100 * (b / a)
     PgBar.style.width = pgCalc + '%'
     if (Number.isInteger(pgCalc)) {
-        pgTxt.innerHTML = pgCalc.toLocaleString('pt-BR') + '%' + '(' + done.length + ' de ' + list.length + ')'
+        pgTxt.innerHTML = pgCalc.toLocaleString('pt-BR') + '%' + ' (' + done.length + ' de ' + list.length + ')'
     } else if (!Number.isInteger(pgCalc)) {
-        pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + '(' + done.length + ' de ' + list.length + ')'
+        pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + ' (' + done.length + ' de ' + list.length + ')'
     }
     localStorage.removeItem(`BarPGwid`)
     localStorage.setItem(`BarPGwid`, pgCalc + '%')
@@ -39,6 +39,7 @@ dragList.addEventListener('dragstart', handleDragStart);
 dragList.addEventListener('dragover', handleDragOver);
 dragList.addEventListener('drop', handleDrop);
 
+
 function handleDragStart(event) {
     draggedItem = event.target;
     event.dataTransfer.effectAllowed = 'move';
@@ -53,8 +54,10 @@ function handleDragOver(event) {
     if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
         let clss = window.document.getElementsByClassName('drag-item')
         for (let c = 0; c <= clss.length; c++) {
-            clss[c].style.margin = '3px'
+            clss[c].style.margin = '3.5px'
         }
+    
+        
     }
 }
 
@@ -88,17 +91,28 @@ function handleDrop(event) {
         });
     }
     
-    targetItem.style.borderTop = '';
-    targetItem.style.borderBottom = '';
-    draggedItem.style.opacity = '';
+    //targetItem.style.borderTop = '';
+    //targetItem.style.borderBottom = '';
+    /*draggedItem.style.opacity = '1';
     draggedItem = null;
-    
+
+
+    let clss = window.document.getElementsByClassName('drag-item')
+    for (let c = 0; c <= clss.length; c++) {
+        clss[c].style.margin = '0px 3.5px 0px 3.5px'
+    }*/
+}
+
+dragList.addEventListener('dragend', function () {
+    draggedItem.style.opacity = '1';
+    draggedItem = null;
+
     let clss = window.document.getElementsByClassName('drag-item')
     for (let c = 0; c <= clss.length; c++) {
         clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
-}
 
+})
 //adaptado do chat gpt
 dragList.addEventListener('dragend', function updateArrayList() {
     const listItems = document.querySelectorAll('.itemlist');
@@ -134,6 +148,8 @@ dragList.addEventListener('dragend', () => {
     updateArray('.allitems', list)
 });
 
+
+
 function MainFunc(itemvalue, booleanValue, addFunc) {
     let checkitem = document.createElement('input');
     checkitem.type = 'checkbox';
@@ -154,11 +170,11 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     nwlbl.setAttribute('id', `lbl${i}`);
     let container = document.createElement('li');
     container.className = 'drag-item'
-    container.setAttribute('id', `${i}`)
+    container.setAttribute('id', `cont${i}`)
     container.setAttribute('draggable', 'true')
     let undo = document.createElement('div');
-    undo.textContent = '          x';
-    undo.className = 'delete';
+    undo.textContent = 'x';
+    undo.classList.add('delete');
     checkitem.addEventListener('click', function () {
         if (this.checked) {
             localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
@@ -175,7 +191,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             done.splice(`${done.indexOf(checkitem)}`, 1)
             nwlbl.classList.remove('done')
             nwlbl.classList.add('undone')
-            undo.style.color = 'black'
+            undo.style.color = 'var(--linhas)'
             PgFunc(list.length, done.length) 
             if (subdiv.style.display !== 'none') {
                 undo.style.display = 'inline'
@@ -191,6 +207,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         checkitem.remove()
         nwlbl.remove()
         undo.remove()
+        container.remove()
         let cond = list.length
         for (let vi=checklist.indexOf(checkitem)+1; vi <= cond ; vi++) {
             if (checklist[vi].checked) {
@@ -199,7 +216,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             } 
         } 
         checklist.splice(`${checklist.indexOf(checkitem)}`, 1)
-        PgFunc(list.length, done.length)  
+        PgFunc(list.length, done.length) 
     })
     divParent.appendChild(container);
     checkedLabel.appendChild(checkitem);
@@ -231,7 +248,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     } 
     else if (!checkitem.checked) {
         nwlbl.classList.add('undone')
-        undo.style.color = 'black'
+        undo.style.color = 'var(--linhas)'
     }
     addFunc
     document.querySelector('input#descr').value = ''
@@ -239,16 +256,25 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
 
 window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgFunc(list.length, done.length)})
 
+window.document.getElementById('descr').addEventListener("keyup", ({key}) => {
+    if (key === 'Enter') {
+        MainFunc(window.document.querySelector('input#descr').value, false), PgFunc(list.length, done.length)
+    }
+})
+
 const root = document.querySelector(':root')
 window.document.getElementById('toggletheme').addEventListener('click', function DarkLight() {
     window.document.getElementById('theme').setAttribute('href', 'style.css')
     if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
         root.style.setProperty('--fundo', '#000000');
         root.style.setProperty('--lightdarkref', '#ffffff')
-        root.style.setProperty('--caixaprincipalref', '#161616')
-        root.style.setProperty('--caixaprincipal', '#161616')
-        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(0, 0, 0)') {
-            root.style.setProperty('--linhas', '#ffffff')  
+        root.style.setProperty('--caixaprincipalref', '#0a0a0a')
+        root.style.setProperty('--caixaprincipal', '#0a0a0a')
+        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(140, 14, 239)') {
+            root.style.setProperty('--linhas', '#8c0eef')  
+        } else if (localStorage.getItem('linepref') === 'rgb(0, 0, 0)') {
+            root.style.setProperty('--linhas', 'rgb(255, 255, 255)')
+            localStorage.setItem('linepref', 'rgb(255, 255, 255)')
         } else {
             root.style.setProperty('--linhas', localStorage.getItem('linepref'))  
         }
@@ -261,9 +287,12 @@ window.document.getElementById('toggletheme').addEventListener('click', function
         root.style.setProperty('--fundo', '#ffffff')
         root.style.setProperty('--lightdarkref', '#000000')
         root.style.setProperty('--caixaprincipalref', '#d0d0d0')
-        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(255, 255, 255)') {
-            root.style.setProperty('--caixaprincipal', '#d0d0d0 ')
-            root.style.setProperty('--linhas', '#000000') 
+        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(140, 14, 239)') {
+            root.style.setProperty('--caixaprincipal', '#c09cdc')
+            root.style.setProperty('--linhas', '#8c0eef') 
+        } else if (localStorage.getItem('linepref') === 'rgb(255, 255, 255)') {
+            root.style.setProperty('--linhas', 'rgb(0, 0, 0)')
+            localStorage.setItem('linepref', 'rgb(0, 0, 0)')
         } else {
             root.style.setProperty('--linhas', localStorage.getItem('linepref')) 
             root.style.setProperty('--caixaprincipal', localStorage.getItem('boxbgpref'))
@@ -357,7 +386,7 @@ editar.addEventListener('click', function() {
 excluir.addEventListener('click', function () {
     localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', null)
-    localStorage.clear()
+    //localStorage.clear()
     divParent.innerHTML = ''
     subdiv.style.display = 'block'
     excluir.style.display = 'none'

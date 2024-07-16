@@ -2,10 +2,10 @@ window.addEventListener('load', function DarkLight() {
     const root = document.querySelector(':root')
     if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
         root.style.setProperty('--fundo', '#ffffff')
-        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(255, 255, 255)') {
-            root.style.setProperty('--caixaprincipal', '#d0d0d0 ')
-            root.style.setProperty('--linhas', '#000000') 
-        } else {
+        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(192, 156, 220)') {
+            root.style.setProperty('--caixaprincipal', '#c09cdc')
+            root.style.setProperty('--linhas', '#8c0eef') 
+        }   else {
             root.style.setProperty('--linhas', localStorage.getItem('linepref')) 
             root.style.setProperty('--caixaprincipal', localStorage.getItem('boxbgpref'))
         }
@@ -21,9 +21,9 @@ window.addEventListener('load', function DarkLight() {
         }
     } else if (localStorage.getItem('savedtheme') == 'dark') {
         root.style.setProperty('--fundo', '#000000');
-        root.style.setProperty('--caixaprincipal', '#161616')
-        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(0, 0, 0)') {
-            root.style.setProperty('--linhas', '#ffffff')  
+        root.style.setProperty('--caixaprincipal', '#0a0a0a')
+        if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(192, 156, 220)') {
+            root.style.setProperty('--linhas', '#8c0eef')  
         } else {
             root.style.setProperty('--linhas', localStorage.getItem('linepref'))  
         }

@@ -155,7 +155,6 @@ input[type=button]:hover {
 
 #submitListBox {
     width: min-content;
-    padding: 3px;
     margin: auto;
 }
 
@@ -376,3 +375,46 @@ https://www.w3schools.com/css/css_tooltip.asp*/
 }
 
 
+@media screen and (max-width: 1300px) {
+    #submitListBox {
+        width: 90vw;
+    }
+
+    .listBorderBox {
+        width: 90vw
+    }
+
+    #listContainer {
+        width: 90vw;
+    }
+
+    #listBox {
+        width: 90vw;
+    }
+
+    #pg {
+        width: 90vw;
+    }
+
+    
+}
+
+@media screen and (max-width: 800px) {
+    #descr {
+        width: 185px;
+        font-size: 13px;
+        
+    } 
+}
+
+@media screen and (max-width: 1300px) and (min-height: 500px) {
+    #submitListBox {
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+ 
+    }
+}
