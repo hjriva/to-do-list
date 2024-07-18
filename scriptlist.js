@@ -29,8 +29,14 @@ function PgFunc(a,b) {
 //adaptado do chat gpt
 document.querySelector('.tooltip').addEventListener('mouseover', function(event) {
     const tooltip = this.querySelector('.tooltiptext');
+    if (matchMedia('only screen and (max-width: 1300px)').matches) {
+    tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 10px)`
+    } else {
     tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
+}
 });
+
+
 
 //ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
 const dragList = document.getElementById('mostraLista');
@@ -217,6 +223,12 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         } 
         checklist.splice(`${checklist.indexOf(checkitem)}`, 1)
         PgFunc(list.length, done.length) 
+        if (list.length == 0) {
+            window.document.getElementById('listBox').classList.remove('listBorderBox')
+            final.style.display = 'none';
+            ExtBar.style.display = 'none';
+            pgTxt.style.display = 'none'
+        }
     })
     divParent.appendChild(container);
     checkedLabel.appendChild(checkitem);
@@ -240,6 +252,12 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
 
     if (list.length > 0) {
         window.document.getElementById('listBox').className = 'listBorderBox'
+    } 
+    if (list.length == 0) {
+        window.document.getElementById('listBox').classList.remove('listBorderBox')
+        final.style.display = 'none';
+        ExtBar.style.display = 'none';
+        pgTxt.style.display = 'none'
     }
     
     if (checkitem.checked) {
@@ -386,7 +404,7 @@ editar.addEventListener('click', function() {
 excluir.addEventListener('click', function () {
     localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', null)
-    //localStorage.clear()
+    localStorage.clear()
     divParent.innerHTML = ''
     subdiv.style.display = 'block'
     excluir.style.display = 'none'

@@ -412,6 +412,11 @@ https://www.w3schools.com/css/css_tooltip.asp*/
         width: 90vw;
     }
 
+   
+    .tooltip .tooltiptext::after {
+        left: 7.5%;
+    }
+    
     
 }
 
@@ -434,3 +439,5 @@ https://www.w3schools.com/css/css_tooltip.asp*/
  
     }
 }
+
+

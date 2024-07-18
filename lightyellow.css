@@ -94,6 +94,7 @@ li {
 
 #mostraLista {
     list-style-type: none;
+    padding: 1px;
 }
 
 #pgtxt {
@@ -101,7 +102,7 @@ li {
 }
 
 #listBox {
-    margin-top: 30px;
+    margin-top: 1px;
     width: 50vw;
 }
 
@@ -118,7 +119,13 @@ li {
     margin: 0px auto 0px auto;
     display: block;
     color: black ;
+    padding: 0px;
 }
+
+#submit p {
+    margin-top: 0px ;
+}
+
 
 #descr {
     width: 315px;
@@ -128,6 +135,7 @@ li {
     padding: 0px 5px 0px 5px;
     font-size: 15px;
     background-color: #fbfe7f ;
+    margin-bottom: 5px; 
 }
 
 input[type=button] {
@@ -155,7 +163,7 @@ input[type=button]:hover {
 
 #submitListBox {
     width: min-content;
-    margin: auto;
+    margin: 30px auto 0px auto;
 }
 
 .allitems {
