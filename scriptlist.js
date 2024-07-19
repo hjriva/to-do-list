@@ -30,9 +30,9 @@ function PgFunc(a,b) {
 document.querySelector('.tooltip').addEventListener('mouseover', function(event) {
     const tooltip = this.querySelector('.tooltiptext');
     if (matchMedia('only screen and (max-width: 1300px)').matches) {
-    tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 10px)`
+        tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 10px)`
     } else {
-    tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
+        tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
 }
 });
 

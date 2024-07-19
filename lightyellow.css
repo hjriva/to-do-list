@@ -163,7 +163,7 @@ input[type=button]:hover {
 
 #submitListBox {
     width: min-content;
-    margin: 30px auto 0px auto;
+    margin: 50px auto 0px auto;
 }
 
 .allitems {
@@ -212,7 +212,7 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: black transparent transparent transparent;
+    border-color:  #faff13 transparent transparent transparent;
 }
 
 /*adaptado do chat gpt*/
