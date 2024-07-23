@@ -36,15 +36,12 @@ document.querySelector('.tooltip').addEventListener('mouseover', function(event)
 }
 });
 
-
-
 //ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
 const dragList = document.getElementById('mostraLista');
 let draggedItem = null;
 dragList.addEventListener('dragstart', handleDragStart);
 dragList.addEventListener('dragover', handleDragOver);
 dragList.addEventListener('drop', handleDrop);
-
 
 function handleDragStart(event) {
     draggedItem = event.target;
@@ -61,9 +58,7 @@ function handleDragOver(event) {
         let clss = window.document.getElementsByClassName('drag-item')
         for (let c = 0; c <= clss.length; c++) {
             clss[c].style.margin = '3.5px'
-        }
-    
-        
+        }    
     }
 }
 
@@ -154,6 +149,9 @@ dragList.addEventListener('dragend', () => {
     updateArray('.allitems', list)
 });
 
+dragList.addEventListener('touchstart', handleDragStart);
+dragList.addEventListener('touchmove', handleDragOver);
+dragList.addEventListener('touchend', handleDrop);
 
 
 function MainFunc(itemvalue, booleanValue, addFunc) {
