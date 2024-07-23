@@ -116,7 +116,6 @@ dragList.addEventListener('dragend', function () {
 })
 
 //click e touch event listeners adaptados do chat gpt
-
 function updateArrayCheckList() {
     let listItems = document.querySelectorAll('.allitems');
     list = [];
@@ -157,12 +156,12 @@ dragList.addEventListener('touchstart', handleTouchStart);
 dragList.addEventListener('touchmove', handleTouchMove);
 dragList.addEventListener('touchend', handleTouchEnd);
 
-
 let initialX = null;
 let initialY = null;
 
 function handleTouchStart(event) {
-    draggedItem = event.target;
+    event.preventDefault()
+    draggedItem = event.target.closest('.drag-item');
     initialX = event.touches[0].clientX;
     initialY = event.touches[0].clientY;
     draggedItem.style.opacity = '0.5';
@@ -170,12 +169,12 @@ function handleTouchStart(event) {
 
 function handleTouchMove(event) {
     event.preventDefault();
+    if (!draggedItem) return;
     const touch = event.touches[0];
     const currentX = touch.clientX;
     const currentY = touch.clientY;
     const dx = currentX - initialX;
     const dy = currentY - initialY;
-
     draggedItem.style.transform = `translate(${dx}px, ${dy}px)`;
     let clss = window.document.getElementsByClassName('drag-item')
     for (let c = 0; c <= clss.length; c++) {
@@ -184,6 +183,8 @@ function handleTouchMove(event) {
 }
 
 function handleTouchEnd(event) {
+    event.preventDefault();
+    if (!draggedItem) return;
     draggedItem.style.opacity = '1';
     draggedItem.style.transform = '';
     const targetItem = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
@@ -199,6 +200,14 @@ function handleTouchEnd(event) {
     }
 }
 
+
+
+document.querySelectorAll('.drag-item').forEach(item => {
+    item.addEventListener('touchstart', handleTouchStart);
+    item.addEventListener('touchmove', handleTouchMove);
+    item.addEventListener('touchend', handleTouchEnd);
+});
+
 dragList.addEventListener('touchend', updateArrayList)
 dragList.addEventListener('touchend', updateArrayCheckList)
 
@@ -208,14 +217,6 @@ dragList.addEventListener('touchend', () => {
 
 dragList.addEventListener('touchend', () => {
     updateArray('.allitems', list)
-});
-
-
-
-document.querySelectorAll('.drag-item').forEach(item => {
-    item.addEventListener('touchstart', handleTouchStart, false);
-    item.addEventListener('touchmove', handleTouchMove, false);
-    item.addEventListener('touchend', handleTouchEnd, false);
 });
 
 
