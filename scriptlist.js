@@ -114,20 +114,10 @@ dragList.addEventListener('dragend', function () {
     }
 
 })
-//adaptado do chat gpt
-dragList.addEventListener('dragend', function updateArrayList() {
-    const listItems = document.querySelectorAll('.itemlist');
-    checklist = [];
-    for (let c = 0; c < listItems.length; c++) {
-        checklist.push(listItems[c]);
-        localStorage.removeItem(`saved${c}`)
-        if (listItems[c].checked) {
-            localStorage.setItem(`saved${c}`, JSON.stringify(true))
-        }
-    }
-})
 
-dragList.addEventListener('dragend', function updateArrayCheckList() {
+//click e touch event listeners adaptados do chat gpt
+
+function updateArrayCheckList() {
     let listItems = document.querySelectorAll('.allitems');
     list = [];
     for (let c = 0; c < listItems.length; c++) {
@@ -139,7 +129,21 @@ dragList.addEventListener('dragend', function updateArrayCheckList() {
         localStorage.removeItem('savedlistjson')
         localStorage.setItem('savedlistjson', JSON.stringify(list))
     } 
-});
+}
+function updateArrayList() {
+    const listItems = document.querySelectorAll('.itemlist');
+    checklist = [];
+    for (let c = 0; c < listItems.length; c++) {
+        checklist.push(listItems[c]);
+        localStorage.removeItem(`saved${c}`)
+        if (listItems[c].checked) {
+            localStorage.setItem(`saved${c}`, JSON.stringify(true))
+        }
+    }
+}
+
+dragList.addEventListener('dragend', updateArrayList)
+dragList.addEventListener('dragend', updateArrayCheckList);
 
 dragList.addEventListener('dragend', () => {
     updateArray('.itemlist', checklist)
@@ -149,9 +153,70 @@ dragList.addEventListener('dragend', () => {
     updateArray('.allitems', list)
 });
 
-dragList.addEventListener('touchstart', handleDragStart);
-dragList.addEventListener('touchmove', handleDragOver);
-dragList.addEventListener('touchend', handleDrop);
+dragList.addEventListener('touchstart', handleTouchStart);
+dragList.addEventListener('touchmove', handleTouchMove);
+dragList.addEventListener('touchend', handleTouchEnd);
+
+
+let initialX = null;
+let initialY = null;
+
+function handleTouchStart(event) {
+    draggedItem = event.target;
+    initialX = event.touches[0].clientX;
+    initialY = event.touches[0].clientY;
+    draggedItem.style.opacity = '0.5';
+}
+
+function handleTouchMove(event) {
+    event.preventDefault();
+    const touch = event.touches[0];
+    const currentX = touch.clientX;
+    const currentY = touch.clientY;
+    const dx = currentX - initialX;
+    const dy = currentY - initialY;
+
+    draggedItem.style.transform = `translate(${dx}px, ${dy}px)`;
+    let clss = window.document.getElementsByClassName('drag-item')
+    for (let c = 0; c <= clss.length; c++) {
+        clss[c].style.margin = '3.5px'
+    }    
+}
+
+function handleTouchEnd(event) {
+    draggedItem.style.opacity = '1';
+    draggedItem.style.transform = '';
+    const targetItem = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+    if (targetItem && targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
+        targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
+    }
+    draggedItem = null;
+    initialX = null;
+    initialY = null;
+    let clss = window.document.getElementsByClassName('drag-item')
+    for (let c = 0; c <= clss.length; c++) {
+        clss[c].style.margin = '0px 3.5px 0px 3.5px'
+    }
+}
+
+dragList.addEventListener('touchend', updateArrayList)
+dragList.addEventListener('touchend', updateArrayCheckList)
+
+dragList.addEventListener('touchend', () => {
+    updateArray('.itemlist', checklist)
+})
+
+dragList.addEventListener('touchend', () => {
+    updateArray('.allitems', list)
+});
+
+
+
+document.querySelectorAll('.drag-item').forEach(item => {
+    item.addEventListener('touchstart', handleTouchStart, false);
+    item.addEventListener('touchmove', handleTouchMove, false);
+    item.addEventListener('touchend', handleTouchEnd, false);
+});
 
 
 function MainFunc(itemvalue, booleanValue, addFunc) {
