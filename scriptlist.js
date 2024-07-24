@@ -158,9 +158,18 @@ function handleTouchEnd(event) {
     for (let c = 0; c <= clss.length; c++) {
         clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
-    updateArrayCheckList()
-    updateArrayList()
 }
+
+dragList.addEventListener('touchend', updateArrayList)
+dragList.addEventListener('touchend', updateArrayCheckList)
+
+dragList.addEventListener('touchend', (event) => {
+    updateArray('.itemlist', checklist)
+})
+
+dragList.addEventListener('touchend', (event) => {
+    updateArray('.allitems', list)
+});
 
 document.querySelectorAll('.drag-item').forEach(item => {
     item.addEventListener('touchstart', handleTouchStart);
