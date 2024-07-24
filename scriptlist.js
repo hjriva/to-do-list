@@ -158,6 +158,8 @@ function handleTouchEnd(event) {
     for (let c = 0; c <= clss.length; c++) {
         clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
+    updateArrayCheckList()
+    updateArrayList()
 }
 
 document.querySelectorAll('.drag-item').forEach(item => {
