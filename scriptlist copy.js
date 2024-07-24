@@ -29,11 +29,9 @@ function PgFunc(a,b) {
 
 const dragList = document.getElementById('mostraLista');
 let draggedItem = null;
-
 dragList.addEventListener('dragstart', handleDragStart);
 dragList.addEventListener('dragover', handleDragOver);
 dragList.addEventListener('drop', handleDrop);
-dragList.addEventListener('dragend', handleDragEnd);
 
 function handleDragStart(event) {
     draggedItem = event.target;
@@ -48,7 +46,7 @@ function handleDragOver(event) {
     const targetItem = event.target;
     if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
         let clss = window.document.getElementsByClassName('drag-item')
-        for (let c = 0; c < clss.length; c++) {
+        for (let c = 0; c <= clss.length; c++) {
             clss[c].style.margin = '3.5px'
         }    
     }
@@ -60,59 +58,93 @@ function handleDrop(event) {
     if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
         if (event.clientY > targetItem.getBoundingClientRect().top + (targetItem.offsetHeight / 2)) {
             targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
-        } else {
+        } 
+        else {
             targetItem.parentNode.insertBefore(draggedItem, targetItem);
         }
-    } else if (targetItem.getAttribute('id') == 'mostraLista') {
+    } 
+    else if (targetItem.getAttribute('id') == 'mostraLista') {
         let clss = window.document.getElementsByClassName('drag-item')
-        for (let c = 0, calc = 0; calc <= event.clientY; c++) {
+        for (c=0, calc=0; calc <= event.clientY; c++) {
             calc = clss[c].getBoundingClientRect().top
             if (calc >= event.clientY) {
                 dragList.insertBefore(draggedItem, dragList.children[c])
-                break;
             }
         }
-    }
-
+    }   
     if (window.document.getElementById(`item${draggedItem.getAttribute('id')}`).checked) {
-        updateArray('.done', done)
+        dragList.addEventListener('dragend', function updateArray() {
+            const listItems = document.querySelectorAll('.done');
+            done.splice = (0, done.length)
+            listItems.forEach(item => {
+                done.push(item);
+            });
+        });
     }
+    
+    //targetItem.style.borderTop = '';
+    //targetItem.style.borderBottom = '';
+    /*draggedItem.style.opacity = '1';
+    draggedItem = null;
+
+
+    let clss = window.document.getElementsByClassName('drag-item')
+    for (let c = 0; c <= clss.length; c++) {
+        clss[c].style.margin = '0px 3.5px 0px 3.5px'
+    }*/
 }
 
-function handleDragEnd(event) {
+dragList.addEventListener('dragend', function () {
     draggedItem.style.opacity = '1';
     draggedItem = null;
 
     let clss = window.document.getElementsByClassName('drag-item')
-    for (let c = 0; c < clss.length; c++) {
+    for (let c = 0; c <= clss.length; c++) {
         clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
 
-    updateArrayList()
-    updateArrayCheckList()
-}
+})
 
-// Funções para atualizar arrays
-function updateArray(selector, array) {
-    array.length = 0;
-    document.querySelectorAll(selector).forEach(item => array.push(item));
-}
-
-function updateArrayCheckList() {
+//click e touch event listeners adaptados do chat gpt
+function updateArrayCheckList(event) {
+    event.stopPropagation()
     let listItems = document.querySelectorAll('.allitems');
     list = [];
-    listItems.forEach(item => list.push(item.innerText));
-    localStorage.setItem('savedlistjson', JSON.stringify(list));
+    for (let c = 0; c < listItems.length; c++) {
+        list.push(listItems[c].innerText);
+    }
+    const listasalva = JSON.parse(localStorage.getItem('savedlistjson'))
+    if (listasalva !== null)  {
+        localStorage.setItem('savedlistjson', null)
+        localStorage.removeItem('savedlistjson')
+        localStorage.setItem('savedlistjson', JSON.stringify(list))
+    } 
+}
+function updateArrayList(event) {
+    event.stopPropagation()
+    const listItems = document.querySelectorAll('.itemlist');
+    checklist = [];
+    for (let c = 0; c < listItems.length; c++) {
+        checklist.push(listItems[c]);
+        localStorage.removeItem(`saved${c}`)
+        if (listItems[c].checked) {
+            localStorage.setItem(`saved${c}`, JSON.stringify(true))
+        }
+    }
 }
 
-function updateArrayList() {
-    let listItems = document.querySelectorAll('.itemlist');
-    checklist = [];
-    listItems.forEach((item, index) => {
-        checklist.push(item);
-        localStorage.setItem(`saved${index}`, item.checked);
-    });
-}
+dragList.addEventListener('dragend', updateArrayList)
+dragList.addEventListener('dragend', updateArrayCheckList);
+
+dragList.addEventListener('dragend', (event) => {
+    event.stopPropagation()
+    updateArray('.itemlist', checklist)
+})
+
+dragList.addEventListener('dragend', (event) => {
+    event.stopPropagation()
+    updateArray('.allitems', list)
+});
 
 dragList.addEventListener('touchstart', handleTouchStart);
 dragList.addEventListener('touchmove', handleTouchMove);
@@ -122,7 +154,12 @@ let initialX = null;
 let initialY = null;
 
 function handleTouchStart(event) {
-    if (event.target.matches('input[type="checkbox"]')) return;
+    event.preventDefault()
+    event.stopPropagation()
+    if (event.target.matches('input[type="checkbox"]')) {
+        // Se o alvo é um checkbox ou botão, não iniciar o arrasto
+        return;
+    }
     draggedItem = event.target.closest('.drag-item');
     initialX = event.touches[0].clientX;
     initialY = event.touches[0].clientY;
@@ -131,7 +168,12 @@ function handleTouchStart(event) {
 
 function handleTouchMove(event) {
     event.preventDefault();
-    if (event.target.matches('input[type="checkbox"]')) return;
+    event.stopPropagation()
+    if (event.target.matches('input[type="checkbox"]')) {
+        // Se o alvo é um checkbox ou botão, não iniciar o arrasto
+        return;
+    }
+    //if (!draggedItem) return;
     const touch = event.touches[0];
     const currentX = touch.clientX;
     const currentY = touch.clientY;
@@ -141,10 +183,17 @@ function handleTouchMove(event) {
     let clss = window.document.getElementsByClassName('drag-item')
     for (let c = 0; c <= clss.length; c++) {
         clss[c].style.margin = '3.5px'
-    }  
+    }    
 }
 
 function handleTouchEnd(event) {
+    event.preventDefault();
+    event.stopPropagation()
+    if (event.target.matches('input[type="checkbox"]')) {
+        // Se o alvo é um checkbox ou botão, não iniciar o arrasto
+        return;
+    }
+    //if (!draggedItem) return;
     draggedItem.style.opacity = '1';
     draggedItem.style.transform = '';
     const targetItem = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
@@ -160,12 +209,26 @@ function handleTouchEnd(event) {
     }
 }
 
+
+
 document.querySelectorAll('.drag-item').forEach(item => {
-    item.addEventListener('touchstart', handleTouchStart);
-    item.addEventListener('touchmove', handleTouchMove);
-    item.addEventListener('touchend', handleTouchEnd);
+    item.addEventListener('touchstart', handleTouchStart(event));
+    item.addEventListener('touchmove', handleTouchMove(event));
+    item.addEventListener('touchend', handleTouchEnd(event));
 });
 
+dragList.addEventListener('touchend', updateArrayList)
+dragList.addEventListener('touchend', updateArrayCheckList)
+
+dragList.addEventListener('touchend', (event) => {
+    event.stopPropagation()
+    updateArray('.itemlist', checklist)
+})
+
+dragList.addEventListener('touchend', (event) => {
+    event.stopPropagation()
+    updateArray('.allitems', list)
+});
 
 //adaptado do chat gpt
 document.querySelector('.tooltip').addEventListener('mouseover', function(event) {

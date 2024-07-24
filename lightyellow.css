@@ -46,6 +46,7 @@ li {
     color: black;
     background-color: #fcff99;
     border: 1px solid #faff13;
+    z-index: 1
 }
 
 .drag-list {
@@ -261,6 +262,7 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     border-right: 1px solid black;
     margin: 0;
     vertical-align: center;   
+    z-index: 60;
 }
 
 .material-icons {
