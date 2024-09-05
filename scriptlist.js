@@ -27,6 +27,13 @@ function PgFunc(a,b) {
     localStorage.setItem(`BarPGwid`, pgCalc + '%')
 }
 
+//adaptado do chat gpt
+//ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
+
+
+//adaptado do chat gpt
+//ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
+
 const dragList = document.getElementById('mostraLista');
 let draggedItem = null;
 
@@ -67,19 +74,22 @@ function handleDrop(event) {
         let clss = window.document.getElementsByClassName('drag-item')
         for (let c = 0, calc = 0; calc <= event.clientY; c++) {
             calc = clss[c].getBoundingClientRect().top
-            if (calc >= event.clientY) {
+            if (calc > event.clientY) {
                 dragList.insertBefore(draggedItem, dragList.children[c])
                 break;
             }
         }
     }
-
     if (window.document.getElementById(`item${draggedItem.getAttribute('id')}`).checked) {
-        updateArray('.done', done)
-    }
+        updateArrays('.done', done, item)
+        localStorage.removeItem('savedlistjson')
+        } 
+        
+
 }
 
 function handleDragEnd(event) {
+
     draggedItem.style.opacity = '1';
     draggedItem = null;
 
@@ -87,15 +97,10 @@ function handleDragEnd(event) {
     for (let c = 0; c < clss.length; c++) {
         clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
-
-    updateArrayList()
-    updateArrayCheckList()
-}
-
-// Funções para atualizar arrays
-function updateArray(selector, array) {
-    array.length = 0;
-    document.querySelectorAll(selector).forEach(item => array.push(item));
+    
+        updateArrayList()
+        updateArrayCheckList()
+    
 }
 
 function updateArrayCheckList() {
@@ -113,6 +118,18 @@ function updateArrayList() {
         localStorage.setItem(`saved${index}`, item.checked);
     });
 }
+
+
+
+function updateArrays(arrayClass, array, newArray) {
+    let listItems = document.querySelectorAll(arrayClass);
+    array = [];
+    listItems.forEach(newArray => array.push(newArray));
+
+
+}
+
+
 
 dragList.addEventListener('touchstart', handleTouchStart);
 dragList.addEventListener('touchmove', handleTouchMove);
@@ -132,16 +149,36 @@ function handleTouchStart(event) {
 function handleTouchMove(event) {
     event.preventDefault();
     if (event.target.matches('input[type="checkbox"]')) return;
+    //console.log(list)
+    //console.log(list)
     const touch = event.touches[0];
     const currentX = touch.clientX;
     const currentY = touch.clientY;
     const dx = currentX - initialX;
     const dy = currentY - initialY;
     draggedItem.style.transform = `translate(${dx}px, ${dy}px)`;
+    const targetItem = event.target;
+    if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
+        if (event.clientY > targetItem.getBoundingClientRect().top + (targetItem.offsetHeight / 2)) {
+            targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
+        } else {
+            targetItem.parentNode.insertBefore(draggedItem, targetItem);
+        }
+    } else if (targetItem.getAttribute('id') == 'mostraLista') {
+        let clss = window.document.getElementsByClassName('drag-item')
+        for (let c = 0, calc = 0; calc <= event.clientY; c++) {
+            calc = clss[c].getBoundingClientRect().top
+            if (calc >= event.clientY) {
+                dragList.insertBefore(draggedItem, dragList.children[c])
+                break;
+            }
+        }
+    }
     let clss = window.document.getElementsByClassName('drag-item')
-    for (let c = 0; c <= clss.length; c++) {
+    for (let c = 0; c < clss.length; c++) {
         clss[c].style.margin = '3.5px'
-    }  
+    } 
+  
 }
 
 function handleTouchEnd(event) {
@@ -155,40 +192,31 @@ function handleTouchEnd(event) {
     initialX = null;
     initialY = null;
     let clss = window.document.getElementsByClassName('drag-item')
-    for (let c = 0; c <= clss.length; c++) {
+    for (let c = 0; c < clss.length; c++) {
         clss[c].style.margin = '0px 3.5px 0px 3.5px'
     }
+    updateArrayList()
+    updateArrayCheckList()  
 }
 
-dragList.addEventListener('touchend', updateArrayList)
-dragList.addEventListener('touchend', updateArrayCheckList)
 
-dragList.addEventListener('touchend', (event) => {
-    updateArray('.itemlist', checklist)
-})
-
-dragList.addEventListener('touchend', (event) => {
-    updateArray('.allitems', list)
-});
-
-document.querySelectorAll('.drag-item').forEach(item => {
-    item.addEventListener('touchstart', handleTouchStart);
-    item.addEventListener('touchmove', handleTouchMove);
-    item.addEventListener('touchend', handleTouchEnd);
-});
-
-
-//adaptado do chat gpt
 document.querySelector('.tooltip').addEventListener('mouseover', function(event) {
     const tooltip = this.querySelector('.tooltiptext');
     if (matchMedia('only screen and (max-width: 1300px)').matches) {
-        tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 10px)`
+        tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
+        const rect = tooltip.getBoundingClientRect()
+        if (rect.left < 0) {
+            console.log('left')
+            tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
+        } else if (rect.right > window.innerWidth) {
+            console.log('right')
+            tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
+        }
     } else {
         tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
-}
+    }
 });
 
-//ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
 
 
 function MainFunc(itemvalue, booleanValue, addFunc) {
@@ -211,13 +239,13 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     nwlbl.setAttribute('id', `lbl${i}`);
     let container = document.createElement('li');
     container.className = 'drag-item'
-    container.setAttribute('id', `cont${i}`)
+    container.setAttribute('id', `${i}`)
     container.setAttribute('draggable', 'true')
     let undo = document.createElement('div');
     undo.textContent = 'x';
     undo.classList.add('delete');
     checkitem.addEventListener('click', function ClickBox (event) {
-        
+        event.stopPropagation()
         if (this.checked) {
             localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
             localStorage.setItem(`saved${checklist.indexOf(checkitem)}`, JSON.stringify(true))
@@ -239,13 +267,16 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             }
         }      
     })
-    
-        undo.addEventListener('click', function(event) {
+    undo.addEventListener('click', function DeleteList(event) {
+        event.stopPropagation()
+        console.log('Antes da remoção:', JSON.stringify(list), JSON.stringify(checklist), JSON.stringify(done));
+        console.log(nwlbl.textContent)
         if (checkitem.checked) {
             localStorage.removeItem(`saved${checklist.indexOf(checkitem)}`)
             done.splice(`${done.indexOf(checkitem)}`, 1)
-        }
+        } 
         list.splice(`${checklist.indexOf(checkitem)}`, 1)
+        //updateArrayList()
         checkitem.remove()
         nwlbl.remove()
         undo.remove()
@@ -265,6 +296,25 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             ExtBar.style.display = 'none';
             pgTxt.style.display = 'none'
         }
+        console.log('Depois da remoção:', JSON.stringify(list), JSON.stringify(checklist), JSON.stringify(done));
+        
+    })
+    undo.addEventListener('touchend', function() {
+       
+
+            updateArray('.itemlist', checklist)
+        
+        
+        
+            updateArray('.allitems', list)
+
+            if (localStorage.getItem('savedlistjson') !== null) {
+            
+                updateArrayList()
+                updateArrayCheckList()  
+        
+        } 
+        
     })
     divParent.appendChild(container);
     checkedLabel.appendChild(checkitem);
@@ -272,8 +322,6 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     container.appendChild(checkedLabel);
     container.appendChild(nwlbl);
     container.appendChild(undo);
-
-
     i++ 
     if (list.length > 1) {
         final.style.display = 'block';
@@ -284,10 +332,8 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             pgTxt.innerHTML = pgCalc.toLocaleString('pt-BR') + '%' + '(' + done.length + ' de ' + list.length + ')'
         } else if (!Number.isInteger(pgCalc)) {
             pgTxt.innerHTML = pgCalc.toLocaleString('pt-br', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%' + '(' + done.length + ' de ' + list.length + ')'
-        }
-        
+        }  
     }
-
     if (list.length > 0) {
         window.document.getElementById('listBox').className = 'listBorderBox'
     } 
@@ -297,7 +343,6 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         ExtBar.style.display = 'none';
         pgTxt.style.display = 'none'
     }
-    
     if (checkitem.checked) {
         nwlbl.classList.add('done')
         undo.style.color = 'grey'
@@ -308,6 +353,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
     }
     addFunc
     document.querySelector('input#descr').value = ''
+    console.log('Após adicionar:', JSON.stringify(list), JSON.stringify(checklist), JSON.stringify(done));
 }
 
 window.document.querySelector('input#add').addEventListener('click', function () {MainFunc(window.document.querySelector('input#descr').value, false), PgFunc(list.length, done.length)})
@@ -419,6 +465,7 @@ function UndoDisplay(disp1, disp2) {
 }
 
 function OngoingList() {
+    //localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', JSON.stringify(list))
     final.style.display = 'none'
     subdiv.style.display = 'none'
@@ -440,9 +487,12 @@ editar.addEventListener('click', function() {
 })
 
 excluir.addEventListener('click', function () {
+    for (i = 0; i < window.document.querySelectorAll('.itemlist').length; i++) {
+        localStorage.removeItem(`saved${i}`)
+    };
     localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', null)
-    localStorage.clear()
+    //localStorage.clear()
     divParent.innerHTML = ''
     subdiv.style.display = 'block'
     excluir.style.display = 'none'
@@ -474,6 +524,10 @@ if (listasalva !== null) {
     }
     OngoingList()
 }
+
+/*else if (listasalva === null) {
+    localStorage.clear()
+}*/
 
 
 

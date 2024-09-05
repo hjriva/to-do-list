@@ -218,6 +218,8 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     border-color: var(--linhas) transparent transparent transparent;
 }
 
+
+
 /*adaptado do chat gpt*/
 
 .checkmarked {
@@ -413,9 +415,9 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     }
 
    
-    .tooltip .tooltiptext::after {
+/*   .tooltip .tooltiptext::after {
         left: 7.5%;
-    }
+    }*/
     
     
 }
