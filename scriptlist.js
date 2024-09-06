@@ -119,6 +119,10 @@ function updateArrayList() {
     });
 }
 
+function updateArray(selector, array) {
+    array.length = 0;
+    document.querySelectorAll(selector).forEach(item => array.push(item));
+}
 
 
 function updateArrays(arrayClass, array, newArray) {
@@ -149,8 +153,6 @@ function handleTouchStart(event) {
 function handleTouchMove(event) {
     event.preventDefault();
     if (event.target.matches('input[type="checkbox"]')) return;
-    //console.log(list)
-    //console.log(list)
     const touch = event.touches[0];
     const currentX = touch.clientX;
     const currentY = touch.clientY;
@@ -199,23 +201,39 @@ function handleTouchEnd(event) {
     updateArrayCheckList()  
 }
 
-
+//adaptado do chatgpt
 document.querySelector('.tooltip').addEventListener('mouseover', function(event) {
     const tooltip = this.querySelector('.tooltiptext');
+    const tooltip2 = document.querySelector('.tooltip .tooltiptext');
+
+    const afterElement = document.createElement('div');
+    afterElement.style.position = 'absolute';
+    afterElement.style.top = '100%'; // Position it below the tooltip text
+    afterElement.style.left = '50%'; // Align in the center
+    afterElement.style.marginLeft = '-5px'; // Center align the triangle
+    afterElement.style.borderWidth = '5px'; // Size of the arrow
+    afterElement.style.borderStyle = 'solid';
+    afterElement.style.borderColor = 'var(--linhas) transparent transparent transparent'; // Triangle effect
+
+// Append it to the tooltip text
+tooltip2.appendChild(afterElement);
     if (matchMedia('only screen and (max-width: 1300px)').matches) {
         tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
         const rect = tooltip.getBoundingClientRect()
         if (rect.left < 0) {
             console.log('left')
-            tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
+            afterElement.style.left = '10%';
+            tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 11px)`
         } else if (rect.right > window.innerWidth) {
             console.log('right')
-            tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
+            afterElement.style.left = '90%';
+            tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 105px)`
         }
     } else {
         tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
     }
 });
+
 
 
 
@@ -276,7 +294,6 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
             done.splice(`${done.indexOf(checkitem)}`, 1)
         } 
         list.splice(`${checklist.indexOf(checkitem)}`, 1)
-        //updateArrayList()
         checkitem.remove()
         nwlbl.remove()
         undo.remove()
