@@ -16,8 +16,8 @@
 
 body {
     background-color: var(--fundo);
-
 }
+
 ul {
     padding: 0;
     margin: 2px;
@@ -421,13 +421,13 @@ https://www.w3schools.com/css/css_tooltip.asp*/
 
 @media screen and (max-width: 1300px) and (min-height: 500px) {
     /*adaptado do chat gpt*/
-     body {
-         display: grid;
-         place-items: center; 
-         height: 100vh; 
-     }
+    body {
+        display: grid;
+        place-items: center; 
+        height: 100vh; 
+    }
  
-     #submitListBox {
-         margin-top: 40px; 
-     }
+    #submitListBox {
+        margin-top: 40px; 
+    }
  }

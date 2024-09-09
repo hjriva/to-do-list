@@ -17,8 +17,8 @@
 
 body {
     background-color: var(--fundo);
-
 }
+
 ul {
     padding: 0;
     margin: 2px;
@@ -379,7 +379,7 @@ https://www.w3schools.com/css/css_tooltip.asp*/
 
 #c9 {
     background-color: var(--lightdarkref);
-    color: var(--caixaprincipalref)
+    color: var(--caixaprincipalref);
 }
 
 #toggletheme {
@@ -400,7 +400,7 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     }
 
     .listBorderBox {
-        width: 90vw
+        width: 90vw;
     }
 
     #listContainer {
@@ -415,17 +415,12 @@ https://www.w3schools.com/css/css_tooltip.asp*/
         width: 90vw;
     }
 
-   
-
-    
-    
 }
 
 @media screen and (max-width: 800px) {
     #descr {
         width: 185px;
         font-size: 13px;
-        
     } 
 }
 
@@ -434,7 +429,7 @@ https://www.w3schools.com/css/css_tooltip.asp*/
     body {
         display: grid;
         place-items: center; 
-        height: 100vh; 
+        height: 90vh; 
     }
 
     #submitListBox {

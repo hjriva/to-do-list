@@ -1,6 +1,6 @@
 window.document.getElementById('currentcolor').addEventListener('click', function () {
     let optionalColors = window.document.getElementById('optcolors')
-    optionalColors.style.display == 'none' ? optionalColors.style.display = 'grid' : optionalColors.style.display = 'none'
+    optionalColors.style.display === 'none' ? optionalColors.style.display = 'grid' : optionalColors.style.display = 'none'
 })
 
 let list = []
@@ -30,10 +30,6 @@ function PgFunc(a,b) {
 //adaptado do chat gpt
 //ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
 
-
-//adaptado do chat gpt
-//ref: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-6.php
-
 const dragList = document.getElementById('mostraLista');
 let draggedItem = null;
 
@@ -56,7 +52,7 @@ function handleDragOver(event) {
     if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
         let clss = window.document.getElementsByClassName('drag-item')
         for (let c = 0; c < clss.length; c++) {
-            clss[c].style.margin = '3.5px'
+            clss[c].style.margin = '3.5px';
         }    
     }
 }
@@ -214,9 +210,8 @@ document.querySelector('.tooltip').addEventListener('mouseover', function(event)
     afterElement.style.borderWidth = '5px'; // Size of the arrow
     afterElement.style.borderStyle = 'solid';
     afterElement.style.borderColor = 'var(--linhas) transparent transparent transparent'; // Triangle effect
-
-// Append it to the tooltip text
-tooltip2.appendChild(afterElement);
+    // Append it to the tooltip text
+    tooltip2.appendChild(afterElement);
     if (matchMedia('only screen and (max-width: 1300px)').matches) {
         tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`
         const rect = tooltip.getBoundingClientRect()
@@ -233,9 +228,6 @@ tooltip2.appendChild(afterElement);
         tooltip.style.left = `calc(${localStorage.getItem(`BarPGwid`)} - 60px)`;
     }
 });
-
-
-
 
 function MainFunc(itemvalue, booleanValue, addFunc) {
     let checkitem = document.createElement('input');
@@ -317,21 +309,12 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         
     })
     undo.addEventListener('touchend', function() {
-       
-
-            updateArray('.itemlist', checklist)
-        
-        
-        
-            updateArray('.allitems', list)
-
-            if (localStorage.getItem('savedlistjson') !== null) {
-            
-                updateArrayList()
-                updateArrayCheckList()  
-        
+        updateArray('.itemlist', checklist)
+        updateArray('.allitems', list)
+        if (localStorage.getItem('savedlistjson') !== null) {
+            updateArrayList()
+            updateArrayCheckList()  
         } 
-        
     })
     divParent.appendChild(container);
     checkedLabel.appendChild(checkitem);
@@ -482,7 +465,6 @@ function UndoDisplay(disp1, disp2) {
 }
 
 function OngoingList() {
-    //localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', JSON.stringify(list))
     final.style.display = 'none'
     subdiv.style.display = 'none'
@@ -509,7 +491,6 @@ excluir.addEventListener('click', function () {
     };
     localStorage.removeItem('savedlistjson')
     localStorage.setItem('savedlistjson', null)
-    //localStorage.clear()
     divParent.innerHTML = ''
     subdiv.style.display = 'block'
     excluir.style.display = 'none'
@@ -541,11 +522,5 @@ if (listasalva !== null) {
     }
     OngoingList()
 }
-
-/*else if (listasalva === null) {
-    localStorage.clear()
-}*/
-
-
 
 
