@@ -144,6 +144,7 @@ function handleTouchStart(event) {
     initialX = event.touches[0].clientX;
     initialY = event.touches[0].clientY;
     draggedItem.style.opacity = '0.5';
+    draggedItem.style.touchAction = 'none'; 
 }
 
 function handleTouchMove(event) {
@@ -155,7 +156,7 @@ function handleTouchMove(event) {
     const dx = currentX - initialX;
     const dy = currentY - initialY;
     draggedItem.style.transform = `translate(${dx}px, ${dy}px)`;
-    const targetItem = event.target;
+    const targetItem = document.elementFromPoint(event.touches[0].clientX, event.touches[0].clientY);
     if (targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
         if (event.clientY > targetItem.getBoundingClientRect().top + (targetItem.offsetHeight / 2)) {
             targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
@@ -180,21 +181,28 @@ function handleTouchMove(event) {
 }
 
 function handleTouchEnd(event) {
+    if (!draggedItem) return;
     draggedItem.style.opacity = '1';
     draggedItem.style.transform = '';
+    draggedItem.style.touchAction = ''; // Remove a propriedade touchAction
+
+    // Finalizar o arrasto e atualizar a lista
     const targetItem = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-    if (targetItem && targetItem !== draggedItem && targetItem.classList.contains('drag-item')) {
+    if (targetItem && targetItem.classList.contains('drag-item') && targetItem !== draggedItem) {
         targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
     }
     draggedItem = null;
     initialX = null;
     initialY = null;
-    let clss = window.document.getElementsByClassName('drag-item')
+
+    // Atualizar margens dos itens
+    let clss = document.getElementsByClassName('drag-item');
     for (let c = 0; c < clss.length; c++) {
-        clss[c].style.margin = '0px 3.5px 0px 3.5px'
+        clss[c].style.margin = '0px 3.5px';
     }
-    updateArrayList()
-    updateArrayCheckList()  
+
+    updateArrayList();
+    updateArrayCheckList();
 }
 
 //adaptado do chatgpt
