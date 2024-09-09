@@ -79,7 +79,7 @@ function handleDrop(event) {
     if (window.document.getElementById(`item${draggedItem.getAttribute('id')}`).checked) {
         updateArrays('.done', done, item)
         localStorage.removeItem('savedlistjson')
-        } 
+    } 
         
 
 }
@@ -175,22 +175,40 @@ function handleTouchMove(event) {
     }
     let clss = window.document.getElementsByClassName('drag-item')
     for (let c = 0; c < clss.length; c++) {
-        clss[c].style.margin = '8px'
+        clss[c].style.margin = '3.5px'
     } 
   
 }
 
 function handleTouchEnd(event) {
     if (!draggedItem) return;
+
+    // Restaurar o estilo do item arrastado
     draggedItem.style.opacity = '1';
     draggedItem.style.transform = '';
     draggedItem.style.touchAction = ''; // Remove a propriedade touchAction
 
-    // Finalizar o arrasto e atualizar a lista
+    // Determinar o item alvo com base na posição final do toque
     const targetItem = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+    
     if (targetItem && targetItem.classList.contains('drag-item') && targetItem !== draggedItem) {
-        targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
+        if (event.changedTouches[0].clientY > targetItem.getBoundingClientRect().top + (targetItem.offsetHeight / 2)) {
+            targetItem.parentNode.insertBefore(draggedItem, targetItem.nextSibling);
+        } else {
+            targetItem.parentNode.insertBefore(draggedItem, targetItem);
+        }
+    } else if (targetItem && targetItem.getAttribute('id') === 'mostraLista') {
+        let clss = document.getElementsByClassName('drag-item');
+        for (let c = 0; c < clss.length; c++) {
+            const itemRect = clss[c].getBoundingClientRect();
+            if (event.changedTouches[0].clientY < itemRect.top) {
+                dragList.insertBefore(draggedItem, dragList.children[c]);
+                break;
+            }
+        }
     }
+
+    // Limpar variáveis de estado
     draggedItem = null;
     initialX = null;
     initialY = null;
@@ -201,9 +219,11 @@ function handleTouchEnd(event) {
         clss[c].style.margin = '0px 3.5px';
     }
 
+    // Atualizar listas e armazenamento local
     updateArrayList();
     updateArrayCheckList();
 }
+
 
 //adaptado do chatgpt
 document.querySelector('.tooltip').addEventListener('mouseover', function(event) {
