@@ -175,7 +175,7 @@ function handleTouchMove(event) {
     }
     let clss = window.document.getElementsByClassName('drag-item')
     for (let c = 0; c < clss.length; c++) {
-        clss[c].style.margin = '3.5px'
+        clss[c].style.margin = '8px'
     } 
   
 }
