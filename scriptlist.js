@@ -330,6 +330,7 @@ function MainFunc(itemvalue, booleanValue, addFunc) {
         if (list.length == 0) {
             window.document.getElementById('listBox').classList.remove('listBorderBox')
             final.style.display = 'none';
+            excluir.style.display = 'none';
             ExtBar.style.display = 'none';
             pgTxt.style.display = 'none'
         }
