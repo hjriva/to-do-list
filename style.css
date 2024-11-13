@@ -13,6 +13,7 @@
     --currentColorBorder: #000000;
     --lightdarkref: #000000;
     --caixaprincipalref: #d0d0d0;
+    --drag-item-border: #ffffff;
 }
 
 body {
@@ -38,14 +39,15 @@ li {
     min-height: 35px;
     height: fit-content;
     border-radius: 3px;
-    margin: 3.5px;
+    margin: 4px;
     display: flex;
     vertical-align: center;
     align-items: center;
     padding: 3px;
     background-color: var(--fundo);
     color: var(--linhas);
-    margin: 0px 3.5px 0px 3.5px;
+    margin: 2.5px 3.5px 0px 3.5px;
+    border: solid 2pt var(--drag-item-border);
 }
 
 .drag-list {

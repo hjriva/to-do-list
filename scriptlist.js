@@ -403,19 +403,21 @@ window.document.getElementById('toggletheme').addEventListener('click', function
         root.style.setProperty('--caixaprincipal', '#0a0a0a')
         if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(140, 14, 239)') {
             root.style.setProperty('--linhas', '#8c0eef')  
+            root.style.setProperty('--drag-item-border', '#8c0eef')
         } else if (localStorage.getItem('linepref') === 'rgb(0, 0, 0)') {
             root.style.setProperty('--linhas', 'rgb(255, 255, 255)')
             localStorage.setItem('linepref', 'rgb(255, 255, 255)')
         } else {
             root.style.setProperty('--linhas', localStorage.getItem('linepref'))  
+            root.style.setProperty('--drag-item-border', localStorage.getItem('linepref'))
         }
-       
         localStorage.removeItem('savedtheme')
         localStorage.setItem('savedtheme', 'dark') 
         document.getElementById('icon').innerText = 'lightbulb'
     } else if (localStorage.getItem('savedtheme') == 'dark') {
         window.document.getElementById('theme').setAttribute('href', 'style.css')
         root.style.setProperty('--fundo', '#ffffff')
+        root.style.setProperty('--drag-item-border', '#ffffff')
         root.style.setProperty('--lightdarkref', '#000000')
         root.style.setProperty('--caixaprincipalref', '#d0d0d0')
         if (localStorage.getItem('linepref') == null || localStorage.getItem('linepref') == 'rgb(140, 14, 239)') {

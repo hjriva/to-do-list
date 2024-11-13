@@ -42,11 +42,12 @@ li {
     align-items: center;
     padding: 3px;
     background-color: var(--fundo);
-    margin: 0px 3.5px 0px 3.5px;
+    margin: 2.5px 3.5px 0px 3.5px;
     color: black;
     background-color: #fcff99;
-    border: 1px solid #faff13;
+    border: 2pt solid #faff13;
     z-index: 1
+    
 }
 
 .drag-list {
