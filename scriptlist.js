@@ -459,6 +459,8 @@ Array.from(cores).forEach(function(cor) {
         localStorage.setItem('linepref', window.getComputedStyle(cor).backgroundColor) 
         if (localStorage.getItem('savedtheme') == 'light' || localStorage.getItem('savedtheme') == null) {
             root.style.setProperty('--caixaprincipal', window.getComputedStyle(cor).color)   
+        } else if (localStorage.getItem('savedtheme') == 'dark') {
+            root.style.setProperty('--drag-item-border', window.getComputedStyle(cor).backgroundColor)
         }
         localStorage.removeItem('boxbgpref')
         localStorage.setItem('boxbgpref', window.getComputedStyle(cor).color) 
